@@ -1,0 +1,31 @@
+#include <ImageSensor.h>
+#include <ImageProcessing.h>
+#include <Filesystem.h>
+#include <Display.h>
+#include <UserInterface.h>
+
+void setup() {
+    // Initialize camera hardware
+    ImageSensor.init();
+    Display.init();
+    UserInterface.init();
+}
+
+void loop() {
+    // Capture image
+    ImageData imageData = ImageSensor.capture();
+
+    // Process image
+    ImageData processedImage = ImageProcessing.process(imageData);
+
+    // Display live preview
+    Display.showPreview(processedImage);
+
+    // Handle user inputs
+    UserInterface.handleInput();
+
+    // Save image when requested
+    if (UserInterface.isCaptureRequested()) {
+        Filesystem.saveImage(processedImage);
+    }
+}
